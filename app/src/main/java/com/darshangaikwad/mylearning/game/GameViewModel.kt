@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModel
 class GameViewModel : ViewModel() {
 
     private var _score = 0
-    var score: Int = 0
+    val score: Int
         get() = score
     private var _currentWordCount = 0
-    var currentWordCount: Int = 0
+    val currentWordCount: Int
         get() = _currentWordCount
     private lateinit var _currentScrambledWord: String
-    var currentScrambledWord: String = ""
+    val currentScrambledWord: String
         get() = _currentScrambledWord
     private var wordsList: MutableList<String> = mutableListOf()
     private lateinit var currentWord: String
@@ -41,7 +41,7 @@ class GameViewModel : ViewModel() {
             getNextWord()
         } else {
             _currentScrambledWord = String(tempWord)
-            ++currentWordCount
+//            ++currentWordCount
             wordsList.add(currentWord)
         }
     }
@@ -60,5 +60,17 @@ class GameViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         Log.d("GameFragment", "GameViewModel destroyed!")
+    }
+
+    private fun increaseScore() {
+        _score += SCORE_INCREASE
+    }
+
+    fun isUserWordCorrect(playerWord: String): Boolean {
+        if (playerWord.equals(currentWord, true)) {
+            increaseScore()
+            return true
+        }
+        return false
     }
 }

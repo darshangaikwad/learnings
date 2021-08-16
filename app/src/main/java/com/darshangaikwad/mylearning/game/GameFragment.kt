@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.darshangaikwad.mylearning.R
 import com.darshangaikwad.mylearning.databinding.GameFragmentBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * Created by Darshan Gaikwad on 16,August,2021
@@ -53,14 +54,11 @@ class GameFragment : Fragment() {
     * Displays the next scrambled word.
     */
     private fun onSubmitWord() {
-        viewModel.currentScrambledWord = getNextScrambledWord()
-        viewModel.currentWordCount++
-        viewModel.score += SCORE_INCREASE
-        binding.wordCount.text =
-            getString(R.string.word_count, viewModel.currentWordCount, MAX_NO_OF_WORDS)
-        binding.score.text = getString(R.string.score, viewModel.score)
-        setErrorTextField(false)
-        updateNextWordOnScreen()
+        if (viewModel.nextWord()) {
+            updateNextWordOnScreen()
+        } else {
+            showFinalScoreDialog()
+        }
     }
 
     /*
@@ -119,6 +117,20 @@ class GameFragment : Fragment() {
      */
     private fun updateNextWordOnScreen() {
         binding.textViewUnscrambledWord.text = viewModel.currentScrambledWord
+    }
+
+    private fun showFinalScoreDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.congratulations))
+            .setMessage(getString(R.string.you_scored, viewModel.score))
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.exit)) { _, _ ->
+                exitGame()
+            }
+            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+                restartGame()
+            }
+            .show()
     }
 
     override fun onDetach() {
