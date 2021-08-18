@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyLearning">
-        <activity android:name=".game.GameActivity">
+        <activity android:name=".cupcake.CupcakeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
